@@ -156,12 +156,27 @@ pyrightconfig.json
 
 ### react ###
 .DS_*
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 logs
+
+# Dependency directories
 **/*.backup.*
 **/*.back.*
 
+# Node modules
 node_modules
 bower_components
+
+# Vite build output
+dist/
+
+# VSCode & JetBrains IDEs
+.vscode/
+.idea/
 
 *.sublime*
 
