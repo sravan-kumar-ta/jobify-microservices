@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from account import admin_views
 from account import views
 
 urlpatterns = [
@@ -13,4 +14,7 @@ urlpatterns = [
     path('user/username/', views.Username.as_view()),
     path('user/update/', views.UserUpdateView.as_view()),
     path('logout/', views.LogoutView.as_view()),
+    # Admin Views
+    path('admin/user-count/', admin_views.UserRoleCountView.as_view()),
+    path('admin/job-seekers/', admin_views.JobSeekersListView.as_view()),
 ]

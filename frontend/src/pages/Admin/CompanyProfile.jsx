@@ -27,8 +27,8 @@ const CompanyProfile = () => {
             <h2 className="text-3xl tracking-wider font-bold text-slate-700">
                {company.title}
             </h2>
-            <p className="mx-2">created by</p>
-            <p>{company.user.get_full_name}</p>
+            {/* <p className="mx-2">created by</p>
+            <p>{company.user_id}</p> */}
          </div>
          <div className="flex mt-4 gap-5">
             <div className="flex">

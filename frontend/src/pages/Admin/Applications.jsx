@@ -66,7 +66,7 @@ const Applications = () => {
                   {allData.map((app) => (
                      <tr key={app.id}>
                         <td className="px-4 py-2 border-b">
-                           {app.applicant.user.get_full_name}
+                           {app.applicant_id}
                         </td>
                         <td className="px-4 py-2 border-b">{app.job.title}</td>
                         <td className="px-4 py-2 border-b">

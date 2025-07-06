@@ -3,17 +3,31 @@ import { FaUser, FaBuilding, FaUserCog, FaSuitcase } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useFetchCountQuery } from "../../services/adminService";
+import {
+   useFetchUsersCountQuery,
+   useFetchJobsCountQuery,
+} from "../../services/adminService";
 
 const AdminDashboard = () => {
    const { user } = useAuth();
-   const { data, isLoading, isError, error } = useFetchCountQuery();
+   const {
+      data: roles,
+      isLoading: isRoleLoading,
+      isError: isRoleError,
+      error: roleError,
+   } = useFetchUsersCountQuery();
+   const {
+      data: jobs,
+      isLoading: isJobLoading,
+      isError: isJobError,
+      error: jobError,
+   } = useFetchJobsCountQuery();
 
-   if (isLoading) {
-      return <div>Loading...</div>;
+   if (isRoleError) {
+      return <div>Error: {roleError.message}</div>;
    }
-   if (isError) {
-      return <div>Error: {error.message}</div>;
+   if (isJobError) {
+      return <div>Error: {jobError.message}</div>;
    }
 
    return (
@@ -34,7 +48,7 @@ const AdminDashboard = () => {
                <div className="flex flex-col md:flex-row justify-between">
                   <div>
                      <p className="text-gray-600 text-lg mb-2">
-                        <strong>Full Name:</strong> {user.get_full_name}
+                        <strong>Full Name:</strong> {user.first_name} {user.last_name}
                      </p>
                      <p className="text-gray-600 text-lg mb-2">
                         <strong>Username:</strong> {user.username}
@@ -66,7 +80,9 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                      <p className="text-gray-600 text-lg">
-                        {data.job_seekers} registered
+                        {isRoleLoading
+                           ? "Loading..."
+                           : `${roles.seekers} registered`}
                      </p>
                      <NavLink
                         to={"job-seekers"}
@@ -87,7 +103,9 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                      <p className="text-gray-600 text-lg">
-                        {data.companies} registered
+                        {isRoleLoading
+                           ? "Loading..."
+                           : `${roles.companies} registered`}
                      </p>
 
                      <Link
@@ -112,7 +130,9 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                      <p className="text-gray-600 text-lg">
-                        {data.jobs} created
+                        {isJobLoading
+                           ? "Loading..."
+                           : `${jobs.jobs} created`}
                      </p>
                      <NavLink
                         to={"jobs"}
@@ -133,7 +153,9 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex justify-between items-center">
                      <p className="text-gray-600 text-lg">
-                        {data.applications} sent
+                        {isJobLoading
+                           ? "Loading..."
+                           : `${jobs.applications} sent`}
                      </p>
 
                      <Link

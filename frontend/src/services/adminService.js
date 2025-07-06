@@ -6,38 +6,43 @@ import { axiosInstance } from "./_axiosInstance";
 // --------------------
 
 const fetchJobSeekers = async ({ page = 1 }) => {
-   const response = await axiosInstance.get("admin/job-seekers/", {
+   const response = await axiosInstance.get("auth/admin/job-seekers/", {
       params: { page },
    });
    return response.data;
 };
 
 const fetchCompanies = async () => {
-   const response = await axiosInstance.get("admin/companies/");
+   const response = await axiosInstance.get("company/admin/companies/");
    return response.data;
 };
 
-const fetchCounts = async () => {
-   const response = await axiosInstance.get("admin/dashboard/");
+const fetchUsersCount = async () => {
+   const response = await axiosInstance.get("auth/admin/user-count/");
+   return response.data;
+};
+
+const fetchJobsCount = async () => {
+   const response = await axiosInstance.get("company/admin/job-stats/");
    return response.data;
 };
 
 const updateCompanyStatus = async (data) => {
-   const response = await axiosInstance.patch("admin/company-approval/", {
+   const response = await axiosInstance.patch("company/admin/company-approval/", {
       ...data,
    });
    return response.data;
 };
 
 const fetchJobs = async (page, selectedCompany) => {
-   const response = await axiosInstance.get("admin/jobs/", {
+   const response = await axiosInstance.get("company/admin/jobs/", {
       params: { page, company__title: selectedCompany },
    });
    return response.data;
 };
 
 const fetchApplications = async (page) => {
-   const response = await axiosInstance.get("admin/applications/", {
+   const response = await axiosInstance.get("company/admin/applications/", {
       params: { page },
    });
    return response.data;
@@ -63,10 +68,18 @@ const useFetchCompaniesQuery = () => {
    });
 };
 
-const useFetchCountQuery = () => {
+const useFetchUsersCountQuery = () => {
    return useQuery({
-      queryKey: ["count"],
-      queryFn: fetchCounts,
+      queryKey: ["user-count"],
+      queryFn: fetchUsersCount,
+      staleTime: 5 * 60 * 1000,
+   });
+};
+
+const useFetchJobsCountQuery = () => {
+   return useQuery({
+      queryKey: ["job-count"],
+      queryFn: fetchJobsCount,
       staleTime: 5 * 60 * 1000,
    });
 };
@@ -122,7 +135,8 @@ const useFetchApplicationsQuery = (page) => {
 export {
    useFetchJobSeekersQuery,
    useFetchCompaniesQuery,
-   useFetchCountQuery,
+   useFetchUsersCountQuery,
+   useFetchJobsCountQuery,
    useUpdateCompanyStatusMutation,
    useFetchJobsQuery,
    useFetchApplicationsQuery,

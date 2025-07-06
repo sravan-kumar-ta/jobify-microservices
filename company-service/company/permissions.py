@@ -17,6 +17,11 @@ class IsCompany(BasePermission):
         return request.user.role == "company"
 
 
+class IsAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role == "admin"
+
+
 class RoleBasedPermission(BasePermission):
     def has_permission(self, request, view):
         user = request.user
