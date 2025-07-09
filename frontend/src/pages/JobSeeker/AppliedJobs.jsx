@@ -20,7 +20,7 @@ const AppliedJobs = () => {
 
    return (
       <div className="p-6 bg-gray-100 min-h-screen">
-         <div className="lg:w-3/5 xl:w-2/5 mx-auto">
+         <div className="lg:w-4/5 xl:w-3/5 mx-auto">
             <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
                Applied Jobs
             </h1>
@@ -43,6 +43,9 @@ const AppliedJobs = () => {
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
                            Status
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-center">
+                           Connecting
                         </th>
                      </tr>
                   </thead>
@@ -100,6 +103,11 @@ const AppliedJobs = () => {
                                        </span>
                                     ),
                                  }[job.status] || ""}
+                              </td>
+                              <td className="px-6 py-4 text-center">
+                                 <button className="py-1.5 px-4 me-2 mb-2 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                                    Chat
+                                 </button>
                               </td>
                            </tr>
                         ))

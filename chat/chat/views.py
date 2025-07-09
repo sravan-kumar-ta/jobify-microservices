@@ -29,3 +29,27 @@ class GetOrCreateRoomView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class RoomListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user_id = UUID(str(request.user.user_id))
+            rooms = PrivateChatRoom.objects.filter(
+                user1_id=user_id
+            ) | PrivateChatRoom.objects.filter(user2_id=user_id)
+
+            room_names = [room.get_room_name() for room in rooms]
+            others = [
+                room.user2_id if room.user1_id == user_id else room.user1_id
+                for room in rooms
+            ]
+
+            return Response({
+                "rooms": room_names,
+                "others": others
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

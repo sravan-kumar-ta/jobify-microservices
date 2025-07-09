@@ -23,6 +23,7 @@ const NavBar = () => {
       } else if (role === "company") {
          links.push({ href: "/company/dashboard", text: "Dashboard" });
          links.push({ href: "/company/jobs", text: "Jobs" });
+         links.push({ href: "/company/connections", text: "Chats" });
       }
    } else {
       links.push({ href: "/signup", text: "Signup" });

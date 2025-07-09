@@ -100,6 +100,9 @@ const Applicant = ({ application, setApplication, jobID }) => {
                <p className="text-gray-700 text-justify bg-gray-100 p-2">
                   {application.cover_letter || "No cover letter added."}
                </p>
+               <button className="mt-2 w-full py-1.5 px-4 me-2 mb-2 text-xs font-medium text-white focus:outline-none bg-blue-500 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10">
+                  Chat
+               </button>
             </div>
             <div className="text-center">
                <p className="mr-3 underline font-bold mb-2">Status</p>
