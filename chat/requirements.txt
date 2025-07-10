@@ -18,6 +18,7 @@ PyJWT==2.9.0
 # Useful packages
 pillow==10.4.0  # if using image uploads
 requests==2.32.4
+python-decouple==3.8
 
 # Python compatibility
 typing_extensions==4.14.1

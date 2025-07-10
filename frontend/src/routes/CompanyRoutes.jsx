@@ -3,13 +3,15 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import JobsList from "../pages/Company/JobsList";
 import Applications from "../pages/Company/Applications";
 import CompanyDashboard from "../pages/Company/CompanyDashboard";
-import Chat from "../pages/Company/Chat";
+import ChatRoom from "../pages/Company/ChatRoom";
+import ChatList from "../pages/Company/ChatList";
 
 const companyRoutesConfig = [
    { path: "dashboard", element: <CompanyDashboard /> },
    { path: "jobs", element: <JobsList /> },
    { path: "jobs/applications/:jobID", element: <Applications /> },
-   { path: "connections", element: <Chat /> },
+   { path: "connections", element: <ChatList /> },
+   { path: "connections/:roomID/:userID", element: <ChatRoom /> },
 ];
 
 const CompanyRoutes = () => {

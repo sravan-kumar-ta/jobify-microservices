@@ -6,11 +6,16 @@ import {
    useUserResumeQuery,
 } from "../../services/companyService";
 import { useUsername } from "../../services/authService";
+import { useCreateChatRoomMutation } from "../../services/chatService";
+import { useNavigate } from "react-router-dom";
 
 const Applicant = ({ application, setApplication, jobID }) => {
    const [status, setStatus] = useState(application.status);
    const [selectedResumeId, setSelectedResumeId] = useState(null);
    const [resumeURL, setResumeURL] = useState(null);
+   const createChatMutation = useCreateChatRoomMutation();
+   const navigate = useNavigate();
+   const [chatLoading, setChatLoading] = useState(false); // Placeholder for any additional state if needed
 
    const prevStatus = application.status;
    const newStatus = status;
@@ -59,6 +64,22 @@ const Applicant = ({ application, setApplication, jobID }) => {
       }
    }, [selectedResumeId, data, reumeIsLoading, error]);
 
+   const handleChat = () => {
+      setChatLoading(true);
+      createChatMutation.mutate(application.applicant_id, {
+         onSuccess: (data) => {
+            console.log("Chat room created successfully:", data);
+            navigate(
+               `/company/connections/${data.room_name}/${application.applicant_id}`
+            );
+         },
+         onError: (error) => {
+            console.error("Error creating chat room:", error);
+            setChatLoading(false);
+         },
+      });
+   };
+
    return (
       <div className="shadow-lg bg-gray-200 px-5 lg:px-12 xl:px-20 py-5 text-gray-700 relative">
          <div className="flex justify-between">
@@ -100,8 +121,11 @@ const Applicant = ({ application, setApplication, jobID }) => {
                <p className="text-gray-700 text-justify bg-gray-100 p-2">
                   {application.cover_letter || "No cover letter added."}
                </p>
-               <button className="mt-2 w-full py-1.5 px-4 me-2 mb-2 text-xs font-medium text-white focus:outline-none bg-blue-500 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10">
-                  Chat
+               <button
+                  onClick={handleChat}
+                  className="mt-2 w-full py-1.5 px-4 me-2 mb-2 text-xs font-medium text-white focus:outline-none bg-blue-500 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10"
+               >
+                  {chatLoading ? "Loading chat..." : "Chat with applicant"}
                </button>
             </div>
             <div className="text-center">

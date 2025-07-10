@@ -11,7 +11,7 @@ class GetOrCreateRoomView(APIView):
 
     def post(self, request):
         try:
-            user1_id = UUID(str(request.user.user_id))
+            user1_id = UUID(str(request.user.id))
             user2_id = UUID(str(request.data.get('user_id')))
 
             # Always sort for consistency
@@ -35,21 +35,27 @@ class RoomListView(APIView):
 
     def get(self, request):
         try:
-            user_id = UUID(str(request.user.user_id))
+            user_id = UUID(str(request.user.id))
+
+            # Get all rooms where the user is either user1 or user2
             rooms = PrivateChatRoom.objects.filter(
                 user1_id=user_id
-            ) | PrivateChatRoom.objects.filter(user2_id=user_id)
+            ) | PrivateChatRoom.objects.filter(
+                user2_id=user_id
+            )
 
-            room_names = [room.get_room_name() for room in rooms]
-            others = [
-                room.user2_id if room.user1_id == user_id else room.user1_id
-                for room in rooms
-            ]
+            # Create the list of room info dictionaries
+            data = []
+            for room in rooms:
+                other_id = (
+                    room.user2_id if room.user1_id == user_id else room.user1_id
+                )
+                data.append({
+                    "room_id": room.get_room_name(),
+                    "user_id": str(other_id)
+                })
 
-            return Response({
-                "rooms": room_names,
-                "others": others
-            }, status=status.HTTP_200_OK)
+            return Response(data, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,13 @@
 import React from "react";
+import { useGetChatListQuery } from "../../services/chatService";
+import { useUsername } from "../../services/authService";
 
 const ChatList = () => {
+   const { data, error, isLoading } = useGetChatListQuery();
+   // cont {data: } =useUsername();
+   if (data) {
+      console.log("Chat List Data:", data);
+   }
    return (
       <div className="mx-auto mt-1 w-full max-w-sm h-[500px] bg-white border border-gray-300 rounded-xl shadow-sm overflow-y-auto">
          <div className="p-4 text-xl font-semibold border-b border-gray-200 bg-gray-50">

@@ -175,7 +175,7 @@ const ApplicantsList = () => {
                </tbody>
             </table>
 
-            {application ? (
+            {/* {application ? (
                <Applicant
                   application={application}
                   setApplication={setApplication}
@@ -183,6 +183,13 @@ const ApplicantsList = () => {
                />
             ) : (
                <ApplicantSkeleton />
+            )} */}
+            {application && (
+               <Applicant
+                  application={application}
+                  setApplication={setApplication}
+                  jobID={jobID}
+               />
             )}
          </div>
       </div>
