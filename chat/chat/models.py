@@ -19,10 +19,13 @@ class PrivateChatRoom(models.Model):
 
 
 class Message(models.Model):
-    room = models.ForeignKey(PrivateChatRoom, on_delete=models.CASCADE)
+    room_name = models.CharField(max_length=255)
     sender_id = models.UUIDField()
     text = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['timestamp']
+
+    def __str__(self):
+        return f"{self.sender} -> {self.room_name}: {self.message[:20]}"

@@ -1,9 +1,12 @@
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import PrivateChatRoom
+from .models import PrivateChatRoom, Message
 from uuid import UUID
+
+from .serializers import MessageSerializer
 
 
 class GetOrCreateRoomView(APIView):
@@ -60,3 +63,12 @@ class RoomListView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MessageListView(ListAPIView):
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        room_name = self.kwargs['room_name']
+        print("rooom name", room_name)
+        return Message.objects.filter(room_name=room_name)
