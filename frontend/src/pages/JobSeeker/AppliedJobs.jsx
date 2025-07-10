@@ -44,9 +44,9 @@ const AppliedJobs = () => {
                         <th scope="col" className="px-6 py-3 text-center">
                            Status
                         </th>
-                        <th scope="col" className="px-6 py-3 text-center">
+                        {/* <th scope="col" className="px-6 py-3 text-center">
                            Connecting
-                        </th>
+                        </th> */}
                      </tr>
                   </thead>
                   <tbody>
@@ -104,11 +104,11 @@ const AppliedJobs = () => {
                                     ),
                                  }[job.status] || ""}
                               </td>
-                              <td className="px-6 py-4 text-center">
+                              {/* <td className="px-6 py-4 text-center">
                                  <button className="py-1.5 px-4 me-2 mb-2 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
                                     Chat
                                  </button>
-                              </td>
+                              </td> */}
                            </tr>
                         ))
                      ) : (

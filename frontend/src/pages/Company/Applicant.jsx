@@ -5,7 +5,7 @@ import {
    useUpdateApplicationMutation,
    useUserResumeQuery,
 } from "../../services/companyService";
-import { useUsername } from "../../services/authService";
+import { useUsernames } from "../../services/authService";
 import { useCreateChatRoomMutation } from "../../services/chatService";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,10 @@ const Applicant = ({ application, setApplication, jobID }) => {
    const prevStatus = application.status;
    const newStatus = status;
 
-   const { data: username, isLoading } = useUsername(application.applicant_id);
+   const { data: usernames, isLoading } = useUsernames([
+      application.applicant_id,
+   ]);
+
    const { mutate } = useUpdateApplicationMutation(
       jobID,
       prevStatus,
@@ -68,7 +71,7 @@ const Applicant = ({ application, setApplication, jobID }) => {
       setChatLoading(true);
       createChatMutation.mutate(application.applicant_id, {
          onSuccess: (data) => {
-            console.log("Chat room created successfully:", data);
+            console.log("Chat room created successfully.");
             navigate(
                `/company/connections/${data.room_name}/${application.applicant_id}`
             );
@@ -88,7 +91,7 @@ const Applicant = ({ application, setApplication, jobID }) => {
                   Username:
                   {isLoading
                      ? "Loading..."
-                     : username || application.applicant_id}
+                     : usernames[0].username || application.applicant_id}
                </h3>
                <div className="flex font-medium">
                   <p className="mr-3">Resume:</p>

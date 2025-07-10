@@ -24,7 +24,7 @@ const ChatList = () => {
       createChatMutation.mutate(userId, {
          onSuccess: (data) => {
             console.log("Chat room created successfully.");
-            navigate(`/company/connections/${data.room_name}/${userId}`);
+            navigate(`/job_seeker/connections/${data.room_name}/${userId}`);
          },
          onError: (error) => {
             console.error("Error creating chat room:", error);

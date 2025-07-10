@@ -42,3 +42,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         }
         
         return data
+
+class UserIDsSerializer(serializers.Serializer):
+    user_ids = serializers.ListField(
+        child=serializers.UUIDField(), allow_empty=False
+    )

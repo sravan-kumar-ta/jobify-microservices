@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .backend import EmailOrUsernameBackend as Backend
-from .serializers import CustomTokenObtainPairSerializer, UserSerializer
+from .serializers import CustomTokenObtainPairSerializer, UserSerializer, UserIDsSerializer
 
 User = get_user_model()
 
@@ -74,18 +74,30 @@ class LogoutView(APIView):
         else:
             return Response({'detail': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-class Username(APIView):
+# class Username(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def get(self, request):
+#         user_id = request.query_params.get('user_id')
+
+#         if not user_id:
+#             return Response({'detail': '"user_id" query param is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         try:
+#             user = User.objects.get(id=user_id)
+#         except User.DoesNotExist:
+#             return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#         return Response({'username': user.username}, status=status.HTTP_200_OK)
+
+class UsernamesByIDsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
-        user_id = request.query_params.get('user_id')
+    def post(self, request):
+        serializer = UserIDsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        if not user_id:
-            return Response({'detail': '"user_id" query param is required'}, status=status.HTTP_400_BAD_REQUEST)
+        user_ids = serializer.validated_data['user_ids']
+        users = User.objects.filter(id__in=user_ids).values('id', 'username')
 
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({'username': user.username}, status=status.HTTP_200_OK)
+        return Response(list(users), status=status.HTTP_200_OK)

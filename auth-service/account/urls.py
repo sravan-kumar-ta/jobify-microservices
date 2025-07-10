@@ -11,7 +11,7 @@ urlpatterns = [
     # path('login/', views.CustomLoginView.as_view()), # Deprecated, use token instead
     path('token/refresh/', TokenRefreshView.as_view()),
     path('user/', views.UserDetailView.as_view()),
-    path('user/username/', views.Username.as_view()),
+    path('users/usernames/', views.UsernamesByIDsView.as_view()),
     path('user/update/', views.UserUpdateView.as_view()),
     path('logout/', views.LogoutView.as_view()),
     # Admin Views

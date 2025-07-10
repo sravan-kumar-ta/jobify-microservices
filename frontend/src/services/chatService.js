@@ -24,7 +24,8 @@ const useCreateChatRoomMutation = () => {
         mutationFn: createRoom,
         onSuccess: (data) => {
             //  queryClient.invalidateQueries({ queryKey: ["chat-room"] });
-            console.log("Chat Room created successfully:", data);
+            // console.log("Chat Room created successfully:", data);
+            console.log("Chat Room created successfully.");
         },
         onError: (error) => {
             console.error("Error creating chatRoom:", error);

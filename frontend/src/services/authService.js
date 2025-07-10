@@ -111,19 +111,19 @@ const useUpdateUserMutation = () => {
    });
 };
 
-const fetchuseUsername = async (userId) => {
-   const response = await axiosInstance.get('auth/user/username/', {
-      params: { user_id: userId },
+const fetchUsernames = async (userIds) => {
+   const response = await axiosInstance.post('auth/users/usernames/', {
+      user_ids: userIds,
    });
-   return response.data.username;
+   return response.data;
 };
 
-const useUsername = (userId) => {
+const useUsernames = (userIds = []) => {
    return useQuery({
-      queryKey: ['user-full-name', userId],
-      queryFn: () => fetchuseUsername(userId),
-      enabled: !!userId,
-      staleTime: 1000 * 60 * 15,
+      queryKey: ['usernames', userIds], 
+      queryFn: () => fetchUsernames(userIds),
+      enabled: userIds.length > 0,          // prevent fetch if no IDs  
+      staleTime: 1000 * 60 * 15,            // cache for 15 mins
    });
 };
 
@@ -134,5 +134,5 @@ export {
    useLogout,
    useGetUserQuery,
    useUpdateUserMutation,
-   useUsername,
+   useUsernames,
 };

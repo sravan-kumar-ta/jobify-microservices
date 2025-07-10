@@ -155,6 +155,15 @@ REST_FRAMEWORK = {
     ),
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(config('redis_host', default='localhost'), config('redis_host', default='6379', cast=int))],
+        },
+    },
+}
+
 SIMPLE_JWT_SECRET_KEY = config('JWT_SIGNING_KEY')  # same as SIGNING_KEY in auth-service
 
 CORS_ALLOWED_ORIGINS = config(
