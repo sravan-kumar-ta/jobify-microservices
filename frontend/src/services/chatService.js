@@ -14,6 +14,11 @@ const getChatList = async () => {
     return response.data;
 }
 
+const getPastChats = async (roomID) => {
+    const response = await axiosInstance.get(`chat/messages/${roomID}/`);
+    return response.data;
+}
+
 // --------------------
 // Custom Hooks
 // --------------------
@@ -41,4 +46,14 @@ const useGetChatListQuery = () => {
     });
 };
 
-export { useCreateChatRoomMutation, useGetChatListQuery };
+const useGetChatHistoryQuery = (roomID) => {
+    return useQuery({
+        queryKey: ["chat-hist", roomID],
+        queryFn: () => getPastChats(roomID),
+        enabled: !!roomID,
+        staleTime: 5 * 60 * 1000,
+    });
+};
+
+
+export { useCreateChatRoomMutation, useGetChatListQuery, useGetChatHistoryQuery };

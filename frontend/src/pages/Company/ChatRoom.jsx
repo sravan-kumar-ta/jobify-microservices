@@ -2,15 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { useUsernames } from "../../services/authService";
+import { useGetChatHistoryQuery } from "../../services/chatService";
 
 const baseURL = import.meta.env.VITE_WEBSOCKET_URL;
 
 const ChatRoom = () => {
    const { roomID, userID } = useParams();
    const { data: usernames, isLoading } = useUsernames([userID]);
-   const socketRef = useRef(null);
+   // const { data: chats, isLoading: chatLoading } =
+   //    useGetChatHistoryQuery(roomID);
+
    const [messages, setMessages] = useState([]);
    const [input, setInput] = useState("");
+   const socketRef = useRef(null);
 
    const parts = roomID.split("_");
    const sender = parts[1] === userID ? parts[1] : parts[2];
