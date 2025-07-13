@@ -19,6 +19,8 @@ PyJWT==2.9.0
 pillow==10.4.0  # if using image uploads
 requests==2.32.4
 python-decouple==3.8
+dj-database-url==3.0.1
+psycopg2-binary>=2.9
 
 # Python compatibility
 typing_extensions==4.14.1

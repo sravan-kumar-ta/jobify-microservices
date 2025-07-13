@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-from datetime import timedelta
+import dj_database_url
 from decouple import config, Csv
 from pathlib import Path
 
@@ -21,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY='django-insecure-dl_ne2gil3h79ns!mel1f&i9y*-0ijxguzmf+qhgyuahq#t#_q' 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -87,6 +88,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
+    'default': dj_database_url.config(
+        default=config("DATABASE_URL")
+    )
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': config('DB_NAME'),
@@ -95,10 +99,6 @@ DATABASES = {
     #     'HOST': config('DB_HOST'),
     #     'PORT': config('DB_PORT'),
     # }
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 }
 
 # Password validation

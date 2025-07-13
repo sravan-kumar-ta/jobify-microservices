@@ -1,0 +1,135 @@
+services:
+  # FRONTEND - React
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost/api/
+      - VITE_WEBSOCKET_URL=ws://localhost/ws/chat/
+    depends_on:
+      - nginx
+
+  # AUTH SERVICE - WSGI
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "8000:8000"
+    environment:
+      - JWT_SIGNING_KEY=${JWT_SIGNING_KEY}
+      - DATABASE_URL=${AUTH_SERVICE_DB_URL}
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost
+    depends_on:
+      - auth-db
+
+  auth-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${AUTH_SERVICE_DB_NAME}
+      POSTGRES_USER: ${AUTH_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_SERVICE_DB_PASS}
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+
+  # COMPANY SERVICE - WSGI
+  company-service:
+    build:
+      context: ./company-service
+    ports:
+      - "8001:8000"
+    environment:
+      - JWT_SIGNING_KEY=${JWT_SIGNING_KEY}
+      - DATABASE_URL=${COMPANY_SERVICE_DB_URL}
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost
+    depends_on:
+      - company-db
+
+  company-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${COMPANY_SERVICE_DB_NAME}
+      POSTGRES_USER: ${COMPANY_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${COMPANY_SERVICE_DB_PASS}
+    volumes:
+      - company_data:/var/lib/postgresql/data
+
+  # SEEKER SERVICE - WSGI
+  seeker-service:
+    build:
+      context: ./seeker-service
+    ports:
+      - "8002:8000"
+    environment:
+      - JWT_SIGNING_KEY=${JWT_SIGNING_KEY}
+      - DATABASE_URL=${SEEKER_SERVICE_DB_URL}
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost
+    depends_on:
+      - seeker-db
+
+  seeker-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${SEEKER_SERVICE_DB_NAME}
+      POSTGRES_USER: ${SEEKER_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${SEEKER_SERVICE_DB_PASS}
+    volumes:
+      - seeker_data:/var/lib/postgresql/data
+
+  # CHAT SERVICE - ASGI
+  chat-service:
+    build:
+      context: ./chat-service
+    ports:
+      - "8003:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - JWT_SIGNING_KEY=${JWT_SIGNING_KEY}
+      - DATABASE_URL=${CHAT_SERVICE_DB_URL}
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost
+    depends_on:
+      - chat-db
+      - redis
+
+  chat-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${CHAT_SERVICE_DB_NAME}
+      POSTGRES_USER: ${CHAT_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${CHAT_SERVICE_DB_PASS}
+    volumes:
+      - chat_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  # NGINX - Reverse Proxy
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - "8080:80" # Use 8080 if 80 is taken by frontend directly
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - auth-service
+      - company-service
+      - seeker-service
+      - chat-service
+volumes:
+  auth_data:
+  company_data:
+  seeker_data:
+  chat_data:
