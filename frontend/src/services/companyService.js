@@ -94,7 +94,7 @@ const useCreateCompanyQuery = () => {
       mutationFn: createCompany,
       onSuccess: (data) => {
          queryClient.invalidateQueries({ queryKey: ["userCompany"] });
-         console.log("Company created successfully:", data);
+         console.log("Company created successfully.");
       },
       onError: (error) => {
          console.error("Error creating comapany:", error);

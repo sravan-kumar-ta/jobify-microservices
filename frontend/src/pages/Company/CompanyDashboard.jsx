@@ -24,6 +24,7 @@ const CompanyDashboard = () => {
       data: companyData,
       error: companyError,
       isLoading: companyLoading,
+      refetch: refetchCompany,
    } = useCheckCompanyQuery();
 
    // Fetch user data
@@ -39,7 +40,7 @@ const CompanyDashboard = () => {
       error: jobsError,
       isLoading: jobsLoading,
    } = useFetchJobsbyCompanyQuery();
-
+   
    const hasCompany = companyData?.company_exists;
 
    const companyDetails = useMemo(() => {
@@ -69,7 +70,7 @@ const CompanyDashboard = () => {
                   onAddJob={() => handleSectionChange("addJob")}
                />
             ) : (
-               <CompanyForm hasCompany={hasCompany} />
+               <CompanyForm onSuccess={refetchCompany} />
             )}
             <UserCard
                user={userData}

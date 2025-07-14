@@ -12,7 +12,7 @@ const initialValues = {
    established_date: "",
 };
 
-const CompanyForm = ({ hasCompany }) => {
+const CompanyForm = ({ onSuccess  }) => {
    const createCompanyMutation = useCreateCompanyQuery();
 
    const handleSubmit = async (
@@ -29,7 +29,8 @@ const CompanyForm = ({ hasCompany }) => {
       createCompanyMutation.mutate(filteredValues, {
          onSuccess: () => {
             resetForm();
-            hasCompany = true; // Update the hasCompany state to true
+            onSuccess?.();
+            console.log("Company created");
          },
          onError: (error) => {
             if (error.response && error.response.data) {
